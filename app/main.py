@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-from database import users_col, db  # Importamos db para acceder a otras colecciones
+from app.database import users_col, db  # Importamos db para acceder a otras colecciones
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from datetime import datetime
