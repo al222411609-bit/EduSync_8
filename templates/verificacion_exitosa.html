@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Verificada - EsuSync</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+    <div class="bg-white p-10 rounded-xl shadow-lg text-center max-w-md border border-gray-100">
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+            <svg class="h-10 w-10 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-900 mb-3">¡Cuenta verificada!</h1>
+        
+        <p class="text-gray-600 mb-8">Gracias por confirmar tu correo electrónico. Tu cuenta en <span class="font-semibold text-indigo-600">EsuSync</span> ha sido activada correctamente y ya tienes acceso total.</p>
+        
+        <a href="{{ url_for('index') }}" class="inline-block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150 shadow-md hover:shadow-lg">
+            Ir al Iniciar Sesión
+        </a>
+        
+        <p class="text-xs text-gray-400 mt-6">© 2024 EsuSync. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>
