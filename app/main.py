@@ -5,11 +5,6 @@ from bson.objectid import ObjectId
 from datetime import datetime
 import re
 import os
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-from app.database import users_col, db 
-from werkzeug.utils import secure_filename
-from bson.objectid import ObjectId
-from datetime import datetime
 import re
 import os
 import smtplib
@@ -360,4 +355,5 @@ def verificar_cuenta(token):
     
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
 
