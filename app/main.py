@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from database import users_col, db  # Importamos db para acceder a otras colecciones
-from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -8,7 +7,6 @@ import re
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from database import users_col, db 
-from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -109,8 +107,6 @@ def register():
     if users_col.find_one({"$or": [{"email": email}, {"matricula": matricula}]}):
         return jsonify({"msg": "El correo o la matrícula ya están registrados"}), 400
 
-    token_verificacion = secrets.token_urlsafe(32)
-    hashed_pw = generate_password_hash(data['password'])
     
     user_doc = {
         "nombres": data['nombres'],
@@ -233,13 +229,12 @@ def register():
     if users_col.find_one({"$or": [{"email": email}, {"matricula": matricula}]}):
         return jsonify({"msg": "El correo o la matrícula ya están registrados"}), 400
 
-    hashed_pw = generate_password_hash(data['password'])
-    user_doc = {
+    password_plana = data['password']    user_doc = {
         "nombres": data['nombres'],
         "apellidos": data['apellidos'],
         "email": email,
         "matricula": matricula,
-        "password": hashed_pw,
+        "password": password_plana,
         "rol": data['rol'],
         "foto_perfil": "default.png",
         "fecha_registro": datetime.now()
