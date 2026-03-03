@@ -175,39 +175,6 @@ def crear_tarea():
     tasks_col.insert_one(nueva_tarea)
     return jsonify({"msg": "Tarea publicada"}), 201
 
-# --- CONFIGURACIÓN SMTP GMAIL ---
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SENDER_EMAIL = "al222411609@gmail.com" 
-SENDER_PASSWORD = "mhjgswvrnuwipmmi" 
-
-def enviar_verificacion(email_usuario, token):
-    url_verificacion = f"http://127.0.0.1:5000/verificar/{token}"
-    mensaje = MIMEMultipart()
-    mensaje["From"] = f"EsuSync <{SENDER_EMAIL}>"
-    mensaje["To"] = email_usuario
-    mensaje["Subject"] = "Verifica tu cuenta - EsuSync"
-    cuerpo = f"""
-    <html>
-      <body style="font-family: sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-        <h2 style="color: #6366f1;">¡Hola! Bienvenido a EsuSync</h2>
-        <p>Haz clic abajo para activar tu cuenta:</p>
-        <a href="{url_verificacion}" style="background-color: #6366f1; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Verificar mi correo</a>
-      </body>
-    </html>
-    """
-    mensaje.attach(MIMEText(cuerpo, "html"))
-    try:
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.sendmail(SENDER_EMAIL, email_usuario, mensaje.as_string())
-        server.quit()
-        return True
-    except Exception as e:
-        print(f"Error SMTP: {e}")
-        return False
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
