@@ -141,8 +141,11 @@ def verificar_cuenta(token):
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.json
-    user = users_col.find_one({"email": data['email']})
+    data = request.form # Cambia .json por .form
+    email = data.get('email')
+    password = data.get('password')
+
+    user = users_col.find_one({"email": email}) 
     
     if user and check_password_hash(user['password'], data['password']):
         if not user.get('verificado', False):
@@ -153,7 +156,7 @@ def login():
         session['nombre'] = user['nombres']
         return jsonify({"msg": "Bienvenido", "rol": user['rol']}), 200
     
-    return jsonify({"msg": "Correo o contraseña incorrectos"}), 401
+    return redirect(url_for('dashboard')), 401
 
 # --- OTRAS RUTA DE API (TAREAS, GRUPOS, ETC) ---
 
