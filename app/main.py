@@ -229,7 +229,8 @@ def register():
     if users_col.find_one({"$or": [{"email": email}, {"matricula": matricula}]}):
         return jsonify({"msg": "El correo o la matrícula ya están registrados"}), 400
 
-    password_plana = data['password']    user_doc = {
+    password_plana = data['password']
+    user_doc = {
         "nombres": data['nombres'],
         "apellidos": data['apellidos'],
         "email": email,
