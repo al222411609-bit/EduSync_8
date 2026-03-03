@@ -76,9 +76,6 @@ files_col = db['archivos']
 def index():
     return render_template('login.html')
 
-@app.route('/register_page')
-def register_page():
-    return render_template('register.html')
 
 @app.route('/dashboard')
 def dashboard():
@@ -86,10 +83,6 @@ def dashboard():
         return redirect('/')
     return render_template('deshboard.html', rol=session.get('rol'))
 
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/')
 
 # --- API DE AUTENTICACIÓN ---
 
@@ -136,8 +129,8 @@ def verificar_cuenta(token):
             {"_id": user['_id']},
             {"$set": {"verificado": True}, "$unset": {"token_registro": ""}}
         )
-        return "<html><body><h1>✅ ¡Cuenta verificada!</h1><p>Ya puedes entrar a EsuSync.</p><a href='/'>Ir al Login</a></body></html>"
-    return "<html><body><h1>❌ Enlace no válido</h1></body></html>", 400
+        return "<html><body><h1>¡Cuenta verificada!</h1><p>Ya puedes entrar a EsuSync.</p><a href='/'>Ir al Login</a></body></html>"
+    return "<html><body><h1> Enlace no válido</h1></body></html>", 400
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -190,74 +183,6 @@ os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'chats'), exist_ok=True)
 tasks_col = db['tareas']
 messages_col = db['mensajes']
 
-
-
-# --- RUTAS DE NAVEGACIÓN ---
-
-@app.route('/')
-def index():
-    return render_template('login.html')
-
-@app.route('/register_page')
-def register_page():
-    return render_template('register.html')
-
-@app.route('/dashboard')
-def dashboard():
-    if 'user_id' not in session:
-        return redirect('/')
-    # Pasamos el rol para mostrar diferentes opciones en el mismo HTML o redirigir
-    return render_template('deshboard.html', rol=session.get('rol'))
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/')
-
-# --- API DE AUTENTICACIÓN ---
-
-@app.route('/api/register', methods=['POST'])
-def register():
-    data = request.json
-    email = data.get('email')
-    matricula = data.get('matricula')
-
-    # Validaciones estrictas
-    if not email.endswith('@gmail.com'):
-        return jsonify({"msg": "Solo se permiten correos @gmail.com"}), 400
-    if not re.match(r"^\d{9}$", str(matricula)):
-        return jsonify({"msg": "La matrícula debe ser de exactamente 9 dígitos"}), 400
-
-    # Verificar duplicados
-    if users_col.find_one({"$or": [{"email": email}, {"matricula": matricula}]}):
-        return jsonify({"msg": "El correo o la matrícula ya están registrados"}), 400
-
-    password_plana = data['password']
-    user_doc = {
-        "nombres": data['nombres'],
-        "apellidos": data['apellidos'],
-        "email": email,
-        "matricula": matricula,
-        "password": password_plana,
-        "rol": data['rol'],
-        "foto_perfil": "default.png",
-        "fecha_registro": datetime.now()
-    }
-    users_col.insert_one(user_doc)
-    return jsonify({"msg": "Usuario creado correctamente"}), 201
-
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.json
-    user = users_col.find_one({"email": data['email']})
-    
-    if user and check_password_hash(user['password'], data['password']):
-        session['user_id'] = str(user['_id'])
-        session['rol'] = user['rol']
-        session['nombre'] = user['nombres']
-        return jsonify({"msg": "Bienvenido", "rol": user['rol']}), 200
-    
-    return jsonify({"msg": "Correo o contraseña incorrectos"}), 401
 
 # --- API DE PERFIL Y ARCHIVOS ---
 
